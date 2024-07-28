@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+namespace MP3_REMAKE
+{
+    public partial class MainWindow : Window
+    {
+        DispatcherTimer timer = new DispatcherTimer();
+        private int[] values = new int[14];
+        private CheckBox[] checkArray = new CheckBox[56];
+        public MainWindow()
+        {
+            InitializeComponent();
+            checkArray = new CheckBox[]{DumpBox_1, DumpBox_2, HourBox_1, HourBox_2, HourBox_3, HourBox_4, HourBox_5, HourBox_6, DumpBox_3, MinBox_1, MinBox_2, MinBox_3, MinBox_4, MinBox_5, MinBox_6, MinBox_7, DumpBox_4, SecBox_1, SecBox_2, SecBox_3, SecBox_4, SecBox_5, SecBox_6, SecBox_7, DumpBox_5, DumpBox_6, DayBox_1, DayBox_2, DayBox_3, DayBox_4, DayBox_5, DayBox_6, DumpBox_7, DumpBox_8, DumpBox_9, MonthBox_1, MonthBox_2, MonthBox_3, MonthBox_4, MonthBox_5, YearBox_1, YearBox_2, YearBox_3, YearBox_4, YearBox_5, YearBox_6, YearBox_7, YearBox_8, YearBox_9, YearBox_10, YearBox_11, YearBox_12, YearBox_13, YearBox_14, YearBox_15, YearBox_16};
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            Output.Content = DateTime.Now.ToString("HH : mm : ss dd / MM / yyyy");
+            int count = 0;
+            foreach (char c in DateTime.Now.ToString("HHmmssddMMyyyy"))
+            {
+                values[count] = Convert.ToInt32(c.ToString());
+                count++;
+            }
+            count = 0;
+            for(int x = 0; x < 14; x++)
+            {
+                string[] binary = new string[] { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100" };
+                string bin = binary[values[x]];
+                foreach (char c in bin)
+                {
+                    bool status = true;
+                    if (Convert.ToInt32(c.ToString()) == 0)
+                        status = false;
+                    else
+                        status = true;
+                    checkArray[count].IsChecked = status;
+                    count++;
+                }
+                count -= 4;
+                count += 4;
+            }
+        }
+    }
+}
